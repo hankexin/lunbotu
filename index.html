@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin: 0px;
+			padding: 0px;
+		}
+		.wrapper{
+			width: 800px;
+			height: 300px;
+			position: relative;
+			margin: 0 auto;
+			border: 1px solid black;
+			overflow: hidden;
+		}
+		.wrapper .move{
+			position: absolute;
+			top: 50%;
+			margin-top: -90px;
+			width: 250px;
+			height: 180px;
+			float: left;
+			/*opacity: 0.4;*/ 
+		}
+		.wrapper .move img{
+			width: 100%;
+			height: 100%;
+		}
+		.wrapper .btn{
+			position: absolute;
+			top: 50%;
+			margin-top: -25px;
+			width: 50px;
+			height: 50px;
+			text-align: center;
+			line-height: 50px;
+			background: gray;
+			opacity: 0.2;
+			cursor: pointer;
+			z-index: 1000;
+		}
+		.wrapper .btn:hover{
+			opacity: 1px;
+		}
+		.wrapper .btnleft{
+			left:  20px;
+		}
+		.wrapper .btnRight{
+			right: 20px;
+		}
+	</style>
+	<script src="jquery.js"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="move">
+			<img src="1.jpg">
+		</div>
+		<div class="move">
+			<img src="2.jpg">
+		</div>
+		<div class="move">
+			<img src="3.jpg">
+		</div>
+		<div class="move">
+			<img src="4.jpg">
+		</div>
+		<div class="move">
+			<img src="5.jpg">
+		</div>
+		<div class="move">
+			<img src="6.jpg">
+		</div>
+		<div class="btn btnleft">&lt</div>
+		<div class="btn btnRight">&gt</div
+	</div>
+	<script>
+		var oLi = $(".wrapper .move");
+		var index = 0,
+			flag = true,
+			timer = null;
+		function init(){
+			oLi.css({'left': '800px','z-index':'1','top':'50%','height':'0px','margin-top':'0px'})
+			oLi.eq(0).css({'top':'50%','margin-top':'-90px','height':'180px','width':'250px','left':'0px','opacity':'0.4','z-index':'1'})
+			oLi.eq(1).css({'top':'0px','margin-top':'0px','height':'300px','width':'400px','left':'200px','z-index':'100'})
+			oLi.eq(2).css({'top':'50%','margin-top':'-90px','height':'180px','width':'250px','left':'550px','opacity':'0.4','z-index':'1'})
+		}
+		function leftMove(){
+			if(flag){
+				flag = false;
+				oLi.css({'z-index':'1'});
+				oLi.eq(index % 6).animate({'left':'-250px','width':'250px',
+					'height':'0','top':'50%','margin-top':'0px','opacity':'0'});
+				oLi.eq((index+1)%6).animate({'left':'0px','width':'250px',
+					'height':'180px','top':'50%','margin-top':'-90px','opacity':'0.4',});
+				oLi.eq((index+2)%6).animate({'left':'200px','width':'400px',
+					'height':'300px','top':'0','margin-top':'0px','opacity':'1','z-index':'100'});
+				oLi.eq((index+3)%6).css({'left':'800px'});
+				oLi.eq((index+3)%6).animate({'left':'550px','width':'250px',
+					'height':'180px','top':'50%','margin-top':'-90px','opacity':'0.5'},function(){
+						index++;
+						flag = true;
+					});		
+			}
+		}
+		function rightMove(){
+			if(flag){
+				flag = false;
+				oLi.css({'z-index':'1'})
+				oLi.eq((index-1) % 6).css({'left':'-250px'});
+		
+				oLi.eq( (index - 1) % 6).animate({'left':'0px','width':'250px','height':'180px','top':'50%','margin-top':'-90px','opacity':'0.4'});
+				
+				
+				oLi.eq(index % 6).animate({'left':'200px','width':'400px','height':'300px','top':'0px','margin-top':'0px','opacity':'1','z-index':'100'});
+				
+				
+				oLi.eq((index + 1) % 6).animate({'left':'550px','width':"250px",'height':'180px','top':'50%','margin-top':'-90px','opacity':'0.4'});
+				
+				oLi.eq((index + 2) % 6).animate({'left':'800px','width':'250px','height':'0px','top':'50%','margin-top':'0','opacity':'0.4'},function () {
+					index--;
+					flag = true;
+				});
+			}
+		}
+		$('.btnRight').on('click',function(){
+			rightMove();
+		})
+		$('.btnleft').on('click',function(){
+			leftMove();
+		})
+		timer = setInterval(leftMove,1000);
+
+		$('.wrapper').on('mousemove',function(){
+			clearInterval(timer);
+		})
+		$('.wrapper').on('mouseout',function(){
+			timer = setInterval(leftMove,1000);
+		})
+		init();
+	</script>
+</body>
+</html>
